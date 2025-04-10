@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import square from "../../assets/3_Data/Lab_05/Squares four 1.png";
 
 const Grid = () => {
     const [data, setData] = useState([]);
@@ -15,9 +16,9 @@ const Grid = () => {
     const totalNewCustomers = 15;
 
     return (
-        <div className="">
+        <div className="mb-15">
             <h2 className="text-lg font-bold flex items-center space-x-2">
-                <span className="text-pink-500">▍</span> <span>Overview</span>
+                <img src={square} alt="Square" /> <span>Overview</span>
             </h2>
             <div className="grid grid-cols-3 gap-6 mt-4 text-black">
                 <div className="p-6 rounded-lg shadow-md bg-red-200">
