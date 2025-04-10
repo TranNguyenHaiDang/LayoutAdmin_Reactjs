@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Overview = () => {
+const Grid = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const Overview = () => {
     const totalNewCustomers = 15;
 
     return (
-        <div className="mb-6">
+        <div className="">
             <h2 className="text-lg font-bold flex items-center space-x-2">
                 <span className="text-pink-500">▍</span> <span>Overview</span>
             </h2>
@@ -37,4 +37,4 @@ const Overview = () => {
     );
 }
 
-export default Overview;
+export default Grid;
