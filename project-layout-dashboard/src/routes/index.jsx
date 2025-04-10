@@ -9,7 +9,7 @@ export const routes = [
             {
                 index: true,
                 element: <Dashboard />
-            },
+            }
         ]
     }
 ];
