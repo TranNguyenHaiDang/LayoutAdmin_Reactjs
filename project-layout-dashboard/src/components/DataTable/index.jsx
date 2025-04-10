@@ -1,23 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import file from "../../assets/3_Data/Lab_05/File text 1.png";
 import create from "../../assets/3_Data/Lab_05/create.png";
 import download from "../../assets/3_Data/Lab_05/Download.png";
 import move from "../../assets/3_Data/Lab_05/Move up.png";
 
 const DataTable = () => {
+    const [selectedAll, setSelectedAll] = useState(false);
+    const [selectedRows, setSelectedRows] = useState(Array(6).fill(false));
+    const [data, setData] = useState([]);
 
-    const data = [
-        { name: 'Elizabeth Lee', company: 'AvatarSystems', orderValue: '$519', orderDate: '10/10/2023', status: 'New' },
-        { name: 'Carlos Garcia', company: 'SnoozeShift', orderValue: '$747', orderDate: '24/10/2023', status: 'New' },
-        { name: 'Elizabeth Bailey', company: 'Prime Time Telecom', orderValue: '$564', orderDate: '08/10/2023', status: 'In-progress' },
-        { name: 'Ryan Brown', company: 'OmniTech Corporation', orderValue: '$541', orderDate: '31/10/2023', status: 'In-progress' },
-        { name: 'Ryan Young', company: 'DataStream Inc.', orderValue: '$579', orderDate: '25/10/2023', status: 'Completed' },
-        { name: 'Haley Adams', company: 'FlowRush', orderValue: '$922', orderDate: '25/10/2023', status: 'Completed' },
-    ];
+    useEffect(() => {
+        fetch('https://67ec9394aa794fb3222e224b.mockapi.io/report')
+            .then(response => response.json())
+            .then(data => setData(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+
+    const toggleAll = () => {
+        const newValue = !selectedAll;
+        setSelectedAll(newValue);
+        setSelectedRows(Array(data.length).fill(newValue));
+    };
+
+    const toggleRow = (index) => {
+        const updated = [...selectedRows];
+        updated[index] = !updated[index];
+        setSelectedRows(updated);
+        setSelectedAll(updated.every(val => val));
+    };
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 min-w-[950px]">
-            {/* Header */}
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center space-x-3">
                     <img src={file} alt="File" className="w-6 h-6" />
@@ -35,13 +49,12 @@ const DataTable = () => {
                 </div>
             </div>
 
-            {/* Table */}
             <div className="overflow-x-auto">
                 <table className="w-full border border-gray-200 text-sm">
                     <thead className="bg-gray-100 border-b border-gray-300 text-gray-600">
                         <tr>
                             <th className="py-3 px-4 border-r text-left">
-                                <input type="checkbox" />
+                                <input type="checkbox" checked={selectedAll} onChange={toggleAll} />
                             </th>
                             <th className="py-3 px-4 font-semibold text-left border-r">CUSTOMER NAME</th>
                             <th className="py-3 px-4 font-semibold text-left border-r">COMPANY</th>
@@ -55,19 +68,19 @@ const DataTable = () => {
                         {data.map((row, index) => (
                             <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                                 <td className="py-3 px-4 border-r">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" checked={selectedRows[index]} onChange={() => toggleRow(index)} />
                                 </td>
                                 <td className="py-3 px-4 flex items-center space-x-3 border-r">
                                     <img
-                                        src={`https://i.pravatar.cc/150?img=${index + 1}`}
+                                        src={row.avatar}
                                         alt="avatar"
                                         className="w-6 h-6 rounded-full"
                                     />
-                                    <span className="font-medium">{row.name}</span>
+                                    <span className="font-medium">{row.customerName}</span>
                                 </td>
                                 <td className="py-3 px-4 border-r">{row.company}</td>
                                 <td className="py-3 px-4 border-r">{row.orderValue}</td>
-                                <td className="py-3 px-4 border-r">{row.orderDate}</td>
+                                <td className="py-3 px-4 border-r">{row.oderDate}</td>
                                 <td className="py-3 px-4 border-r">
                                     <span
                                         className={`px-2 py-1 rounded-full text-xs font-medium ${row.status === 'New'
@@ -115,8 +128,6 @@ const DataTable = () => {
                             {num}
                         </button>
                     ))}
-
-                    {/* Next button */}
                     <button className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100">
                         &gt;
                     </button>
